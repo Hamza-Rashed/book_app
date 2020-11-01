@@ -20,7 +20,7 @@ app.get('/search/new',renderForm)
 
 // ---------------------------
 function welcome(req,res){
-    res.render('pages/index.ejs');
+    res.render('pages/index');
 }
 
 function search(req,res){
@@ -64,7 +64,7 @@ function findData(data , massege) {
     }
 }
 
-app.get('/*',(req,res)=>{
+app.use('*',(req,res)=>{
     res.render('pages/error.ejs')
 });
 app.listen(PORT,() =>{

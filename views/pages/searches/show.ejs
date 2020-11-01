@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Books</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1>Wellcome every one ... Best Books</h1>
+    <main>
+      <article>
+        <% booksResult.forEach (book => { %>
+        <section>
+          <img src="<%= book.bookImage %>" alt="" />
+          <h2><%= book.bookName %></h2>
+          <p><%= book.bookAuthor %></p>
+          <p><%= book.bookDesc %></p>
+        </section>
+        <% }) %>
+      </article>
+    </main>
+  </body>
+</html>

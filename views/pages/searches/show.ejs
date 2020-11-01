@@ -3,15 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/base.css">
     <title>Our Books</title>
-    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <h1>Wellcome every one ... Best Books</h1>
+    <header>
+      <h1>Best Books!</h1>
+      <nav>
+          <li>Home</li>
+          <li>Result</li>
+          <li>Search</li>
+          <li>About</li>
+      </nav>
+  </header>
+    <h1 class="headers">Search result</h1>
     <main>
       <article>
         <% booksResult.forEach (book => { %>
-        <section>
+        <section class="result">
           <img src="<%= book.bookImage %>" alt="" />
           <h2><%= book.bookName %></h2>
           <p><%= book.bookAuthor %></p>

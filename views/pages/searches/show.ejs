@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/base.css">
-    <title>Our Books</title>
+    <%- include('../../layout/head') %>
+    <title>Show Book</title>
   </head>
+<style>
+  #bookTitle,#author,#thumnail,#ISBN,#description,#bookshelf{
+    display: none;
+  }
+</style>
   <body>
     <header>
-      <h1>Best Books!</h1>
-      <nav>
-          <li>Home</li>
-          <li>Result</li>
-          <li>Search</li>
-          <li>About</li>
-      </nav>
-  </header>
-    <h1 class="headers">Search result</h1>
+      <%- include('../../layout/header.ejs')%>
+    </header>
     <main>
-      <article>
-        <% booksResult.forEach (book => { %>
-        <section class="result">
-          <img src="<%= book.bookImage %>" alt="" />
-          <h2><%= book.bookName %></h2>
-          <p><%= book.bookAuthor %></p>
-          <p><%= book.bookDesc %></p>
+      <ul>
+        <% bookDetails.forEach(item=>{ %>
+<section class="resultDetails">
+          <img src="<%= item.thumnail %>" />
+
+          <h2><%= item.BookTitle %></h2>
+
+          <h4><%= item.AuthorName %></h3>
+
+          <p><%= item.BookDescription %></p>
+
+          <p><%= item.ISBN %></p>
+
+          <p><%= item.bookshelf %></p>
+          <br />
+          <form action="/books" method="post">
+            <input id="bookTitle" type="text"value="<%= item.BookTitle %>"name="bookTitle"/>
+            <input id="author" type="text" value="<%= item.AuthorName %>" name="author"/>
+            <input id="thumnail" type="text" value="<%= item.thumnail %>" name="thumnail"/>
+            <input id="ISBN" type="text" value="<%= item.ISBN %>" name="ISBN"/>
+            <input id="description" name="description" value = "<%= item.BookDescription %>"/>
+            <input id="bookshelf" type="text" value="<%= item.bookshelf %>" name="bookshelf"/>
+            <button class="submit">Select This Book</button>
+          </form>
         </section>
-        <% }) %>
-      </article>
+        <% }); %>
+      </ul>
     </main>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="../js/app.js"></script>
   </body>
 </html>

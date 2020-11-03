@@ -5,13 +5,11 @@
         <title>Book</title>
     </head>
 <body>
-    
 
     <header>
         <%- include('../../layout/header.ejs')%>
     </header>
     
-
     <section class="resultDetails">
     <img src=" <%= Details.image_url%>"/><br>
     <h2>
@@ -28,7 +26,22 @@
         <%= Details.bookshelf %>
     </p><br>
 
-    <a href="/books"></a>
+<button class="upd-btn">Update Deatils</button>
+
+<form action="/books/<%= Details.id %>?_method=DELETE" method="POST">
+    <input type="submit" value="Delete Book" class="del-btn">
+</form>
+</section>
+<section class="form-container">
+<form class="form-styling" action="/books/<%= Details.id %>?_method=put" method="post">
+    <input class="input-update" type="text" name="bookname" value="<%= Details.title %>" placeholder="Title"><br>
+    <input class="input-update" type="text" name="bookauthor" value="<%= Details.author %>" placeholder="Author"><br>
+    <input class="input-update" type="text" name="bookISBN" value="<%= Details.isbn %>" placeholder="isbn"><br>
+    <input class="input-update" type="text" name="image_url" value="<%= Details.image_url %>" placeholder="Image Url"><br>
+    <textarea type="text" class="update-text-area" name="bookdesc" placeholder="description"><%= Details.description %></textarea><br>
+    <input class="input-update" type="text" name="bookcat" value="<%= Details.bookshelf %>" placeholder="bookshelf"><br>
+    <button class="btn" type="submit">Update Book</button>
+    </form>
 </section>
 
 

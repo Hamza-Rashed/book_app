@@ -37,6 +37,7 @@ function getFromDatabase(req, res) {
     });
 }
 
+
 function getFormSearch(req, res) {
     res.render("pages/searches/new");
 }
@@ -52,6 +53,7 @@ function getNewBooks(req, res) {
         urlBooks = `https://www.googleapis.com/books/v1/volumes?q=${searchKeyWord}+inauthor`;
     }
 
+
     superagent.get(urlBooks).then(data => {
         let result = data.body.items.map(element => {
             console.log(element.volumeInfo)
@@ -61,6 +63,7 @@ function getNewBooks(req, res) {
             bookDetails: result
         });
     });
+
 }
 
 function showMoreDetails(req, res) {
@@ -137,6 +140,7 @@ function Book(data) {
 }
 // helper functions
 
+
 function findData(data, massege) {
     if (data) {
         return data;
@@ -150,3 +154,4 @@ client.connect().then(() => {
         console.log(`server is running`);
     });
 })
+

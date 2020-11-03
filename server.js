@@ -6,11 +6,13 @@ const
     pg = require("pg"),
     app = express(),
     PORT = process.env.PORT || 3000,
-    client = new pg.Client(process.env.DATABASE_URL);
-
+    client = new pg.Client(process.env.DATABASE_URL),
+    methodOverride = require('method-override');
+    
 // -------------------------------
 app.use(express.static("public"));
 app.set("view engine", "ejs");
+app.use(methodOverride('_method'));
 app.use(express.urlencoded({
     extended: true
 }));
@@ -20,6 +22,8 @@ app.get("/search/new", getFormSearch)
 app.post("/searches", getNewBooks)
 app.get('/books/:id', showMoreDetails)
 app.post('/books', addToDatabase)
+app.put('/books/:id', updateData)
+app.delete('/books/:id',deletData)
 app.get("*", getError)
 // -------------------------------
 // functions for endPoint
@@ -37,24 +41,26 @@ function getFormSearch(req, res) {
     res.render("pages/searches/new");
 }
 
-function getNewBooks(req,res){
+function getNewBooks(req, res) {
     let searchKeyWord = req.body.inputName;
     let searchBy = req.body.search;
     console.log(searchBy)
     let urlBooks;
-    if (searchBy == 'title'){
+    if (searchBy == 'title') {
         urlBooks = `https://www.googleapis.com/books/v1/volumes?q=${searchKeyWord}+intitle`;
-    }else{
+    } else {
         urlBooks = `https://www.googleapis.com/books/v1/volumes?q=${searchKeyWord}+inauthor`;
     }
 
-superagent.get(urlBooks).then(data =>{
-    let result = data.body.items.map(element =>{
-        console.log(element.volumeInfo)
-        return new Book(element)
+    superagent.get(urlBooks).then(data => {
+        let result = data.body.items.map(element => {
+            console.log(element.volumeInfo)
+            return new Book(element)
+        });
+        res.render('pages/searches/show', {
+            bookDetails: result
+        });
     });
-    res.render('pages/searches/show',{bookDetails: result });
-});
 }
 
 function showMoreDetails(req, res) {
@@ -80,14 +86,39 @@ function addToDatabase(req, res) {
         allInfo.bookshelf
     ];
     client.query(sqlSend, safeValues)
-            client.query(sqlGet).then(dataGet => {
-                let lastItem = dataGet.rows.length - 1
-                console.log(dataGet.rows[lastItem].description)
-                res.render("pages/books/show", {
-                    Details: dataGet.rows[lastItem]
-                });
-            })
+    client.query(sqlGet).then(dataGet => {
+        let lastItem = dataGet.rows.length - 1
+        console.log(dataGet.rows[lastItem].description)
+        res.render("pages/books/show", {
+            Details: dataGet.rows[lastItem]
+        });
+    })
 }
+
+function updateData(req, res) {
+    const id = req.params.id
+    let {
+        bookname,
+        bookauthor,
+        bookdesc,
+        bookISBN,
+        bookcat,
+        image_url
+    } = req.body;
+    let sql = `UPDATE book SET title=$1,author=$2,description=$3,ISBN=$4,bookshelf=$5,image_url=$6 WHERE ID =$7;`;
+    let safeValues = [bookname, bookauthor, bookdesc, bookISBN , bookcat,image_url , id];
+    client.query(sql, safeValues).then(() => {
+        res.redirect('/');
+    })
+}
+
+function deletData(req, res){
+    const taskId = req.params.id;
+    const sql = 'DELETE FROM book WHERE id=$1';
+    client.query(sql, [taskId]).then(()=>{
+      res.redirect('/');
+    });
+  }
 
 function getError(req, res) {
     res.render("pages/error");
